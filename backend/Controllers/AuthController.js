@@ -18,7 +18,8 @@ const signup = async (req, res) =>{
    
    res.status(201)
     .json({
-      message: 'signuu successfully', success: false
+      message: 'sigin successfully',
+       success: true
     });
    }catch(err){
     res.status(500)
@@ -34,16 +35,17 @@ const login = async (req, res) =>{
   try{
     const {email,password} = req.body;
     const user = await UserModel.findOne({email});
+    const errorMsg = 'Auth failed email or password is wrong';
 
     if(!user){
         return res.status(403)
-        .json({message: 'auth failed as email and password is wrong', success: false});
+        .json({message: errorMsg, success: false});
     }
     const isPassEqual = await bcrypt.compare(password,user.password);
 
     if(!isPassEqual){
       return res.status(403)
-      .json({message: 'auth failed as email and password is wrong', success: false});
+      .json({message: errorMsg, success: false});
     }
    // email and password is correct then only we vgenerate JWT token
 
@@ -57,7 +59,8 @@ const login = async (req, res) =>{
 
    res.status(200)
     .json({
-      message: 'login successfully', success: true,
+      message: 'login successfully',
+      success: true,
       jwtToken,
       email,
       name: user.name
